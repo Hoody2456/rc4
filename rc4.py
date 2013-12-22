@@ -1,0 +1,35 @@
+def rc4(message, password):
+    i = 0
+    j = 0
+    box = range(256)
+    key = range(256)
+    a = 0
+    cipher = ""
+    while a <= 255:
+        ctmp = password[a % len(password):(a % len(password)) + 1]
+        key[a] = ord(ctmp)
+        box[a] = a
+        a += 1
+    x = 0
+    b = 0
+    while b <= 255:
+        x = (x + box[b] + key[b]) % 256
+        tempSwap = box[b]
+        box[b] = box[x]
+        box[x] = tempSwap
+        b += 1
+    a = 1
+    while a <= len(message):
+        itmp = 0
+        i = (i + 1) % 256
+        j = (j + box[i]) % 256
+        itmp = box[i]
+        box[i] = box[j]
+        box[j] = itmp
+        k = box[(box[i] + box[j]) % 256]
+        ctmp = message[a-1:a]
+        itmp = ord(ctmp)
+        cipherby = itmp ^ k
+        cipher += chr(cipherby)
+        a += 1
+    return cipher
